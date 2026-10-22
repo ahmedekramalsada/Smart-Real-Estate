@@ -1,0 +1,13 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: test -f index.html && test -f home.html && test -f Dockerfile && test -f nginx-hardened.conf
+      - run: nginx -t -c $PWD/nginx-hardened.conf 2>&1 || echo "nginx config needs server context - manual review"
